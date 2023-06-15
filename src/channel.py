@@ -17,9 +17,38 @@ class Channel:
         self.title = self.channel['items'][0]['snippet']['title']  # название канала
         self.description = self.channel['items'][0]['snippet']['description']  # описание канала
         self.url = f"https://www.youtube.com/channel/{self.channel['items'][0]['id']}"  # ссылка на канал
-        self.subscribers = self.channel['items'][0]['statistics']['subscriberCount']  # количество подписчиков
-        self.video_count = self.channel['items'][0]['statistics']['videoCount']  # количество видео на канале
-        self.view_count = self.channel['items'][0]['statistics']['viewCount']  # общее количество просмотров
+        self.subscribers = int(self.channel['items'][0]['statistics']['subscriberCount'])  # количество подписчиков
+        self.video_count = int(self.channel['items'][0]['statistics']['videoCount'])  # количество видео на канале
+        self.view_count = int(self.channel['items'][0]['statistics']['viewCount'])  # общее количество просмотров
+
+    def __str__(self):
+        """Возвращает название и ссылку на канал: <название_канала> (<ссылка_на_канал>)"""
+        return f"{self.title} ({self.url})"
+
+    """
+    Магические методы для сложения, вычитания и сравнения 2 каналов между собой.
+    Все операции сравниваются по количеству подписчиков.
+    """
+    def __add__(self, other):
+        return self.subscribers + other.subscribers
+
+    def __sub__(self, other):
+        return self.subscribers - other.subscribers
+
+    def __lt__(self, other):
+        return self.subscribers < other.subscribers
+
+    def __le__(self, other):
+        return self.subscribers <= other.subscribers
+
+    def __gt__(self, other):
+        return self.subscribers > other.subscribers
+
+    def __ge__(self, other):
+        return self.subscribers >= other.subscribers
+
+    def __eq__(self, other):
+        return self.subscribers == other.subscribers
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
