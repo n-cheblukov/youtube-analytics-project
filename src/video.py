@@ -11,14 +11,23 @@ class Video:
     def __init__(self, video_id):
         self.video_id = video_id
         # запрос статистики видео
-        self.video_response = self.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
-                                                         id=video_id
-                                                         ).execute()
-
-        self.title: str = self.video_response['items'][0]['snippet']['title']   # наименование видео
-        self.url: str = f"https://youtu.be/{self.video_response['items'][0]['id']}"     # ссылка на видео
-        self.view_count: int = int(self.video_response['items'][0]['statistics']['viewCount'])  # количество просмотров
-        self.like_count: int = int(self.video_response['items'][0]['statistics']['likeCount'])  # количество лайков
+        # проверка существует ли видео
+        try:
+            self.video_response = self.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
+                                                                 id=video_id
+                                                                 ).execute()
+            empty_video = self.video_response['items'][0]
+        except IndexError:
+            print('По данному ID видео не существует')
+            self.title = None
+            self.url = None
+            self.view_count = None
+            self.like_count = None
+        else:
+            self.title: str = self.video_response['items'][0]['snippet']['title']   # наименование видео
+            self.url: str = f"https://youtu.be/{self.video_response['items'][0]['id']}"     # ссылка на видео
+            self.view_count: int = int(self.video_response['items'][0]['statistics']['viewCount'])  # количество просмотров
+            self.like_count: int = int(self.video_response['items'][0]['statistics']['likeCount'])  # количество лайков
 
     def __str__(self):
         """Вывод наименования видео для пользователя"""
