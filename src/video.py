@@ -11,6 +11,7 @@ class Video:
     def __init__(self, video_id):
         self.video_id = video_id
         # запрос статистики видео
+        # проверка существует ли видео
         try:
             self.video_response = self.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                                                  id=video_id
